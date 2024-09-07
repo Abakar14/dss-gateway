@@ -1,0 +1,42 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: dss-gateway
+  # Configurable URLs for services
+  cloud:
+    gateway:
+      routes:
+        - id: student-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/student/**
+          filters:
+            - RewritePath=/student/(?<remaining>.*), /dss/api/v1/${remaining}  # Rewrite path for Student Service
+#            - AddRequestHeader=X-Request-Source, Gateway  # Add a custom header
+#            - AddResponseHeader=X-Response-Source, Gateway
+#            - StripPrefix=1  # Removes the "/student" prefix from the request before forwarding
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 10  # Number of requests per second
+#                redis-rate-limiter.burstCapacity: 20  # Maximum burst capacity
+
+        - id: teacher-service
+          predicates:
+            - Path=/teacher/**
+          uri: http://localhost:8083
+services:
+  context:
+    path: dss/api/v1
+# JWT Properties expiration and refresh times (in milliseconds)
+# Secret key
+jwt:
+  secret:
+    key: 8KvVu4Bn2KwBNX1MdnXY6VaRVLekVxurk3aaJxnzdCuZL6AHEL0EnnAOYLZtHWUr
+  access:
+    token:
+      expiration: 1800000 # 30 min in milliseconds for token expiration time
+  refresh:
+    token:
+      expiration: 604800000    # 7 days in milliseconds
+

@@ -1,0 +1,14 @@
+jwt:
+    secret: your_jwt_secret_key
+spring:
+    cloud:
+        gateway:
+            routes:
+            -   id: student-service
+                predicates:
+                - Path=/student/**
+                uri: http://localhost:8081
+            -   id: teacher-service
+                predicates:
+                - Path=/teacher/**
+                uri: http://localhost:8082
