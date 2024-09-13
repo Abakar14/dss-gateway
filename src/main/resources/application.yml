@@ -1,5 +1,15 @@
 server:
   port: 9090
+
+services:
+  context:
+    path: dss/api/v1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
 spring:
   application:
     name: dss-gateway
@@ -8,26 +18,24 @@ spring:
     gateway:
       routes:
         - id: student-service
-          uri: http://localhost:8082
+          uri: lb://student-service
           predicates:
-            - Path=/student/**
-          filters:
-            - RewritePath=/student/(?<remaining>.*), /dss/api/v1/${remaining}  # Rewrite path for Student Service
-#            - AddRequestHeader=X-Request-Source, Gateway  # Add a custom header
-#            - AddResponseHeader=X-Response-Source, Gateway
-#            - StripPrefix=1  # Removes the "/student" prefix from the request before forwarding
-#            - name: RequestRateLimiter
-#              args:
-#                redis-rate-limiter.replenishRate: 10  # Number of requests per second
-#                redis-rate-limiter.burstCapacity: 20  # Maximum burst capacity
+            - Path=/dss/api/v1/students/**
 
         - id: teacher-service
+          uri: lb://teacher-service
           predicates:
-            - Path=/teacher/**
-          uri: http://localhost:8083
-services:
-  context:
-    path: dss/api/v1
+            - Path=/dss/api/v1/teachers/**
+
+        - id: dm-service
+          uri: lb://dm-service
+          predicates:
+            - Path=/dss/api/v1/documents/**
+
+        - id: bff-service
+          uri: lb://bff-service
+          predicates:
+            - Path=/dss/api/v1/bff/**
 # JWT Properties expiration and refresh times (in milliseconds)
 # Secret key
 jwt:
