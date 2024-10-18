@@ -20,7 +20,7 @@ spring:
         cors-configurations:
           "[/**]":
             allowed-origins:
-              - "http://localhost:4200"  #Angular app domain
+              - "http://localhost:4200" #Angular app domain
             allowed-methods:
               - GET
               - POST
@@ -32,15 +32,54 @@ spring:
               - Content-Type
             allow-credentials: true
       routes:
-        - id: student-service
+        - id: school-service-school
+          uri: lb://school-service
+          predicates:
+            - Path=/dss/api/v1/schools/**
+
+        - id: school-service-class
+          uri: lb://school-service
+          predicates:
+            - Path=/dss/api/v1/classes/**
+
+        - id: school-service-address
+          uri: lb://school-service
+          predicates:
+            - Path=/dss/api/v1/addresses/**
+          filters:
+            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
+
+        - id: school-service-employee
+          uri: lb://school-service
+          predicates:
+            - Path=/dss/api/v1/employees/**
+
+        - id: student-service-student
           uri: lb://student-service
           predicates:
             - Path=/dss/api/v1/students/**
+          filters:
+            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
 
-        - id: teacher-service
+        - id: student-service-guardian
+          uri: lb://student-service
+          predicates:
+            - Path=/dss/api/v1/guardians/**
+
+        - id: student-service-consent
+          uri: lb://student-service
+          predicates:
+            - Path=/dss/api/v1/consents/**
+
+        - id: teacher-service-teacher
           uri: lb://teacher-service
           predicates:
             - Path=/dss/api/v1/teachers/**
+
+        - id: teacher-service-cours
+          uri: lb://teacher-service
+          predicates:
+            - Path=/dss/api/v1/courses/**
 
         - id: dm-service
           uri: lb://dm-service
@@ -51,6 +90,8 @@ spring:
           uri: lb://bff-service
           predicates:
             - Path=/dss/api/v1/bff/**
+          filters:
+            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
 # JWT Properties expiration and refresh times (in milliseconds)
 # Secret key
 jwt:
@@ -61,5 +102,5 @@ jwt:
       expiration: 1800000 # 30 min in milliseconds for token expiration time
   refresh:
     token:
-      expiration: 604800000    # 7 days in milliseconds
+      expiration: 604800000 # 7 days in milliseconds
 
