@@ -14,8 +14,6 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
 spring:
-  profiles:
-    active: dev
   application:
     name: dss-gateway
   # Configurable URLs for services

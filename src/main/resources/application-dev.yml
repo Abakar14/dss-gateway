@@ -1,10 +1,3 @@
-server:
-  port: 9090
-
-services:
-  context:
-    path: dss/api/v1
-
 eureka:
   client:
     service-url:
@@ -14,10 +7,6 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
 spring:
-  profiles:
-    active: dev
-  application:
-    name: dss-gateway
   # Configurable URLs for services
   cloud:
     gateway:
@@ -35,68 +24,110 @@ spring:
             allowed-headers:
               - Authorization
               - Content-Type
+            exposed-headers:
+              - Authorization  # Expose Authorization header so it's visible to the browser
             allow-credentials: true
       routes:
         - id: school-service-school
           uri: lb://school-service # Load-balanced call to scholl-service
           predicates:
-            - Path=/dss/api/v1/schools/**
+            - Path=/schools/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: school-service-class
           uri: lb://school-service
           predicates:
-            - Path=/dss/api/v1/classes/**
+            - Path=/classes/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: school-service-address
           uri: lb://school-service
           predicates:
-            - Path=/dss/api/v1/addresses/**
+            - Path=/addresses/**
           filters:
-            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
+            - PrefixPath=/dss/api/v1
+
 
         - id: school-service-employee
           uri: lb://school-service
           predicates:
-            - Path=/dss/api/v1/employees/**
+            - Path=/employees/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: student-service-student
           uri: lb://student-service
           predicates:
-            - Path=/dss/api/v1/students/**
+            - Path=/students/**
           filters:
-            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
+            - PrefixPath=/dss/api/v1
+
 
         - id: student-service-guardian
           uri: lb://student-service
           predicates:
-            - Path=/dss/api/v1/guardians/**
+            - Path=/guardians/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: student-service-consent
           uri: lb://student-service
           predicates:
-            - Path=/dss/api/v1/consents/**
+            - Path=/consents/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: teacher-service-teacher
           uri: lb://teacher-service
           predicates:
-            - Path=/dss/api/v1/teachers/**
+            - Path=/teachers/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: teacher-service-cours
           uri: lb://teacher-service
           predicates:
-            - Path=/dss/api/v1/courses/**
+            - Path=/courses/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: dm-service
           uri: lb://dm-service
           predicates:
-            - Path=/dss/api/v1/documents/**
+            - Path=/documents/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
 
         - id: bff-service
           uri: lb://bff-service
           predicates:
-            - Path=/dss/api/v1/bff/**
+            - Path=/bff/**
           filters:
-            - AddRequestHeader=Authorization, Bearer #{Authorization}  # Corrected format
+            - PrefixPath=/dss/api/v1
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
 # JWT Properties expiration and refresh times (in milliseconds)
 # Secret key
 jwt:
