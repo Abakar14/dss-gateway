@@ -35,7 +35,6 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: school-service-class
           uri: lb://school-service
           predicates:
@@ -51,14 +50,12 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: school-service-employee
           uri: lb://school-service
           predicates:
             - Path=/employees/**
           filters:
             - PrefixPath=/dss/api/v1
-
 
         - id: student-service-student
           uri: lb://student-service
@@ -75,14 +72,12 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: student-service-consent
           uri: lb://student-service
           predicates:
             - Path=/consents/**
           filters:
             - PrefixPath=/dss/api/v1
-
 
         - id: teacher-service-teacher
           uri: lb://teacher-service
@@ -91,14 +86,12 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: teacher-service-cours
           uri: lb://teacher-service
           predicates:
             - Path=/courses/**
           filters:
             - PrefixPath=/dss/api/v1
-
 
         - id: dm-service
           uri: lb://dm-service
@@ -107,15 +100,12 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: bff-service
           uri: lb://bff-service
           predicates:
             - Path=/bff/**
           filters:
             - PrefixPath=/dss/api/v1
-
-
 
 management:
   endpoints:
