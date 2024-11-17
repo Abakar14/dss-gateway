@@ -64,7 +64,6 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
-
         - id: student-service-guardian
           uri: lb://student-service
           predicates:
@@ -106,6 +105,7 @@ spring:
             - Path=/bff/**
           filters:
             - PrefixPath=/dss/api/v1
+           # - AddRequestHeader=Authorization, Bearer #{Authorization}
 
 management:
   endpoints:
