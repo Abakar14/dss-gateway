@@ -92,6 +92,27 @@ spring:
           filters:
             - PrefixPath=/dss/api/v1
 
+        - id: user-service-users
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
+        - id: user-service-permissions
+          uri: lb://user-service
+          predicates:
+            - Path=/permissions/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
+        - id: user-service-roles
+          uri: lb://user-service
+          predicates:
+            - Path=/roles/**
+          filters:
+            - PrefixPath=/dss/api/v1
+
         - id: dm-service
           uri: lb://dm-service
           predicates:
