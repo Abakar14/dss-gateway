@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.bytmasoft'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
 	toolchain {
@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
 	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	implementation group: 'me.paulschwarz', name: 'spring-dotenv', version: "${dotenvVersion}"
 	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
 	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
 	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
